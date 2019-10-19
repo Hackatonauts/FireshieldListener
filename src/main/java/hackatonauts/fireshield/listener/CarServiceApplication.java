@@ -18,7 +18,7 @@ public class CarServiceApplication {
 		FireResponse response = new FireResponse(event.getTitle(),
 												event.getGeometries()[0].getPosition(),
 												event.getGeometries()[0].getDate(),
-												new FireEventSource("EONET", event.getSourceId()));
+												new FireEventSource("EONET", event.getSourceId()), event.getConfidence());
 		System.out.println(response.toString());
 	}
 }
