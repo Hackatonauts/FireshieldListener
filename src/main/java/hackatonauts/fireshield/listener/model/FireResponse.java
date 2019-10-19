@@ -13,12 +13,14 @@ public class FireResponse {
     private Position position;
     private String date;
     private FireEventSource source;
+    private int confidence;
 
-    public FireResponse(String name, Position position, String date, FireEventSource source) {
+    public FireResponse(String name, Position position, String date, FireEventSource source, int confidence) {
         this.name = name;
         this.position = position;
         this.date = date;
         this.source = source;
+        this.confidence = confidence;
     }
 
     @Override

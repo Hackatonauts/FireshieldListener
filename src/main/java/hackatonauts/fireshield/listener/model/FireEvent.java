@@ -24,6 +24,7 @@ public class FireEvent {
     private String title;
     private String description;
     private Geometries[] geometries;
+    private int confidence = 100;
 
     @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
     public FireEvent(@JsonProperty("id") String sourceId, @JsonProperty("title") String title, @JsonProperty("description") String description, @JsonProperty("geometries") Geometries[] geometries) {
