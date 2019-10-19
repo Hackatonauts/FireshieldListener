@@ -1,7 +1,7 @@
 package hackatonauts.fireshield.listener;
 
-import hackatonauts.fireshield.listener.model.Car;
-import hackatonauts.fireshield.listener.model.Tenant;
+import hackatonauts.fireshield.listener.model.Position;
+import hackatonauts.fireshield.listener.model.Geometries;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -16,11 +16,11 @@ class LoadDatabase {
 	@Bean
     CommandLineRunner initDatabase(CarRepository carRepository, TenantRepository tenantRepository) {
 		return args -> {
-			logger.info("Preloading " + carRepository.save(new Car("Fiat", "125p")));
-			logger.info("Preloading " + carRepository.save(new Car("BMW", "3")));
+			logger.info("Preloading " + carRepository.save(new Position(new double[]{12.3,45.6})));
+			logger.info("Preloading " + carRepository.save(new Position(new double[]{99.9,000})));
 
-			logger.info("Preloading " + tenantRepository.save(new Tenant("Jan", "Janowski")));
-			logger.info("Preloading " + tenantRepository.save(new Tenant("Pawel", "Pawlowski")));
+			logger.info("Preloading " + tenantRepository.save(new Geometries("Jan", "Janowski")));
+			logger.info("Preloading " + tenantRepository.save(new Geometries("Pawel", "Pawlowski")));
 		};
 	}
 }

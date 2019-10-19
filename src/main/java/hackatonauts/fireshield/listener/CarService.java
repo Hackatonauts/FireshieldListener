@@ -1,6 +1,6 @@
 package hackatonauts.fireshield.listener;
 
-import hackatonauts.fireshield.listener.model.Car;
+import hackatonauts.fireshield.listener.model.Position;
 import hackatonauts.fireshield.listener.model.RentedCars;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,15 +19,15 @@ import java.util.*;
 @NoArgsConstructor
 public class CarService {
 
-    private List<Car> cars;
+    private List<Position> positions;
     private List<RentedCars> rentedCars;
     private RestTemplate restTemplate = new RestTemplate();
 
-    private List<Car> getAllCars() {
-        ResponseEntity<List<Car>> response = restTemplate.exchange(
-                "http://localhost:8082/cars/", HttpMethod.GET, null,
-                new ParameterizedTypeReference<List<Car>>(){});
-        return cars = response.getBody();     //check it
+    private List<Position> getAllCars() {
+        ResponseEntity<List<Position>> response = restTemplate.exchange(
+                "http://localhost:8082/positions/", HttpMethod.GET, null,
+                new ParameterizedTypeReference<List<Position>>(){});
+        return positions = response.getBody();     //check it
     }
 
     private List<RentedCars> getAllRentedCars() {
@@ -57,7 +57,7 @@ public class CarService {
             }
         } else {
             throw new MissingResourceException(
-                    "Car is not available in Car Rental",
+                    "Position is not available in Position Rental",
                     this.getClass().getName(),
                     carId.toString()
             );

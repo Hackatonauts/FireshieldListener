@@ -1,8 +1,8 @@
 package hackatonauts.fireshield.listener;
 
-import hackatonauts.fireshield.listener.model.Car;
+import hackatonauts.fireshield.listener.model.Position;
 import hackatonauts.fireshield.listener.model.RentedCars;
-import hackatonauts.fireshield.listener.model.Tenant;
+import hackatonauts.fireshield.listener.model.Geometries;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -19,36 +19,36 @@ class CarRestController {
         this.rentedCarsRepository = rentedCarsRepository;
     }
 
-    @GetMapping("/cars/{id}")
-    Car oneCar(@PathVariable Long id) {
+    @GetMapping("/positions/{id}")
+    Position oneCar(@PathVariable Long id) {
         return carRepository.findById(id).orElseThrow(() -> new CarNotFoundException(id));
     }
 
-    @GetMapping("/cars")
-    List<Car> allCars() {
+    @GetMapping("/positions")
+    List<Position> allCars() {
         return carRepository.findAll();
     }
 
-    @PostMapping("/cars")
-    Car newCar(@RequestBody Car newCar) {
-        return carRepository.save(newCar);
+    @PostMapping("/positions")
+    Position newCar(@RequestBody Position newPosition) {
+        return carRepository.save(newPosition);
     }
 
-    @PutMapping("/cars/{id}")
-    Car replaceCar(@RequestBody Car newCar, @PathVariable Long id) {
+    @PutMapping("/positions/{id}")
+    Position replaceCar(@RequestBody Position newPosition, @PathVariable Long id) {
         return carRepository.findById(id)
                 .map(car -> {
-                    car.setBrandName(newCar.getBrandName());
-                    car.setModel(newCar.getModel());
+                    car.setBrandName(newPosition.getBrandName());
+                    car.setModel(newPosition.getModel());
                     return carRepository.save(car);
                 })
                 .orElseGet(() -> {
-                    newCar.setId(id);
-                    return carRepository.save(newCar);
+                    newPosition.setId(id);
+                    return carRepository.save(newPosition);
                 });
     }
 
-    @DeleteMapping("/cars/{id}")
+    @DeleteMapping("/positions/{id}")
     void deleteCar(@PathVariable Long id) {
         carRepository.deleteById(id);
     }
@@ -56,31 +56,31 @@ class CarRestController {
     // tenant
 
     @PostMapping("/tenants")
-    Tenant newTenant(@RequestBody Tenant newTenant) {
-        return tenantRepository.save(newTenant);
+    Geometries newTenant(@RequestBody Geometries newGeometries) {
+        return tenantRepository.save(newGeometries);
     }
 
     @GetMapping("/tenants/{id}")
-    Tenant oneTenant(@PathVariable Long id) {
+    Geometries oneTenant(@PathVariable Long id) {
         return tenantRepository.findById(id).orElseThrow(() -> new CarNotFoundException(id));   // change to tenant
     }
 
     @GetMapping("/tenants")
-    List<Tenant> allTenants() {
+    List<Geometries> allTenants() {
         return tenantRepository.findAll();
     }
 
     @PutMapping("/tenants/{id}")
-    Tenant replaceTenant(@RequestBody Tenant newTenant, @PathVariable Long id) {
+    Geometries replaceTenant(@RequestBody Geometries newGeometries, @PathVariable Long id) {
         return tenantRepository.findById(id)
-                .map(tenant -> {
-                    tenant.setFirstName(newTenant.getFirstName());
-                    tenant.setSurName(newTenant.getSurName());
-                    return tenantRepository.save(tenant);
+                .map(geometries -> {
+                    geometries.setDate(newGeometries.getDate());
+                    geometries.setPosition(newGeometries.getPosition());
+                    return tenantRepository.save(geometries);
                 })
                 .orElseGet(() -> {
-                    newTenant.setId(id);
-                    return tenantRepository.save(newTenant);
+                    newGeometries.setId(id);
+                    return tenantRepository.save(newGeometries);
                 });
     }
 

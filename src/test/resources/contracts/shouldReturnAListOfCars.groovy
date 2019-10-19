@@ -1,9 +1,9 @@
 import org.springframework.cloud.contract.spec.Contract
 
 Contract.make {
-    description("should return a list of cars")
+    description("should return a list of positions")
     request {
-        url "/cars"
+        url "/positions"
         method GET()
     }
     response {
