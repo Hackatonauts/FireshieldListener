@@ -12,6 +12,8 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.lang.reflect.Type;
+
 @Service
 @Getter
 @Setter
@@ -28,6 +30,7 @@ public class FireService {
                 null,
                 new ParameterizedTypeReference<FireModel>() {
                 });
+
         return fireModel = response.getBody();
     }
 
@@ -52,5 +55,11 @@ public class FireService {
                 });
 
         return response.getStatusCode();
+    }
+    
+    ResponseEntity<String> getCSVEvents() {
+        return restTemplate.exchange(Constants.csvGlobal, HttpMethod.GET, null,
+                new ParameterizedTypeReference<String>() {
+        });
     }
 }
