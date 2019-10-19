@@ -1,6 +1,5 @@
 package hackatonauts.fireshield.listener;
 
-import com.sun.deploy.net.HttpResponse;
 import hackatonauts.fireshield.listener.helpers.Constants;
 import hackatonauts.fireshield.listener.model.FireModel;
 import hackatonauts.fireshield.listener.model.FireResponse;
@@ -56,7 +55,7 @@ public class FireService {
 
         return response.getStatusCode();
     }
-    
+
     ResponseEntity<String> getCSVEvents() {
         return restTemplate.exchange(Constants.csvGlobal, HttpMethod.GET, null,
                 new ParameterizedTypeReference<String>() {
