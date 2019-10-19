@@ -23,6 +23,5 @@ public class FireEventsListenerApplication {
                 eventList.get(0).getGeometries()[0].getDate(),
 												new FireEventSource("EONET", eventList.get(0).getSourceId()), eventList.get(0).getConfidence());
 		System.out.println(response.toString());
-//        System.out.println(service.postFireResponse(response).toString());
     }
 }

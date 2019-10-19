@@ -51,9 +51,17 @@ public class ModisParser {
                 CSVParser csvParser = CSVParser.parse(csvResponse, CSVFormat.DEFAULT.withFirstRecordAsHeader());
 
                 for (CSVRecord csvRecord : csvParser) {
+                    int confidence = Integer.valueOf(csvRecord.get("confidence"));
+                    if (confidence != 100) {
+                        continue;
+                    }
+
                     FireResponse csvEvent = new FireResponse("",
-                            new Position(new double[] {Double.valueOf(csvRecord.get("longitude")), Double.valueOf(csvRecord.get("latitude"))}),
-                            csvToIsoDate(csvRecord.get("acq_date"), csvRecord.get("acq_time")), new FireEventSource("MODIS", ""), Integer.valueOf(csvRecord.get("confidence")));
+                            new Position(new double[] { Double.valueOf(csvRecord.get("longitude")),
+                                    Double.valueOf(csvRecord.get("latitude")) }),
+                            csvToIsoDate(csvRecord.get("acq_date"), csvRecord.get("acq_time")),
+                            new FireEventSource("MODIS", ""),
+                            confidence);
                     events.add(csvEvent);
                 }
             } catch (IOException e) {
