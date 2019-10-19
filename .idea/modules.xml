@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Fireshield - listener.iml" filepath="$PROJECT_DIR$/Fireshield - listener.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/car-service_main.iml" filepath="$PROJECT_DIR$/.idea/modules/car-service_main.iml" group="car-service" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/car-service_test.iml" filepath="$PROJECT_DIR$/.idea/modules/car-service_test.iml" group="car-service" />
+      <module fileurl="file://$PROJECT_DIR$/fireshield-listener.iml" filepath="$PROJECT_DIR$/fireshield-listener.iml" />
     </modules>
   </component>
 </project>
