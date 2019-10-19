@@ -55,7 +55,6 @@ public class ModisParser {
                     if (confidence != 100) {
                         continue;
                     }
-
                     FireResponse csvEvent = new FireResponse("",
                             new Position(new double[] { Double.valueOf(csvRecord.get("longitude")),
                                     Double.valueOf(csvRecord.get("latitude")) }),
