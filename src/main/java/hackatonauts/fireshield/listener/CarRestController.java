@@ -1,8 +1,8 @@
 package hackatonauts.fireshield.listener;
 
-import hackatonauts.fireshield.listener.model.Car;
+import hackatonauts.fireshield.listener.model.Position;
 import hackatonauts.fireshield.listener.model.RentedCars;
-import hackatonauts.fireshield.listener.model.Tenant;
+import hackatonauts.fireshield.listener.model.Geometries;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -19,19 +19,19 @@ class CarRestController {
         this.rentedCarsRepository = rentedCarsRepository;
     }
 
-    @GetMapping("/cars/{id}")
-    Car oneCar(@PathVariable Long id) {
+    @GetMapping("/positions/{id}")
+    Position oneCar(@PathVariable Long id) {
         return carRepository.findById(id).orElseThrow(() -> new CarNotFoundException(id));
     }
 
-    @GetMapping("/cars")
-    List<Car> allCars() {
+    @GetMapping("/positions")
+    List<Position> allCars() {
         return carRepository.findAll();
     }
 
-    @PostMapping("/cars")
-    Car newCar(@RequestBody Car newCar) {
-        return carRepository.save(newCar);
+    @PostMapping("/positions")
+    Position newCar(@RequestBody Position newPosition) {
+        return carRepository.save(newPosition);
     }
 
     @DeleteMapping("/cars/{id}")
@@ -42,17 +42,17 @@ class CarRestController {
     // tenant
 
     @PostMapping("/tenants")
-    Tenant newTenant(@RequestBody Tenant newTenant) {
-        return tenantRepository.save(newTenant);
+    Geometries newTenant(@RequestBody Geometries newGeometries) {
+        return tenantRepository.save(newGeometries);
     }
 
     @GetMapping("/tenants/{id}")
-    Tenant oneTenant(@PathVariable Long id) {
+    Geometries oneTenant(@PathVariable Long id) {
         return tenantRepository.findById(id).orElseThrow(() -> new CarNotFoundException(id));   // change to tenant
     }
 
     @GetMapping("/tenants")
-    List<Tenant> allTenants() {
+    List<Geometries> allTenants() {
         return tenantRepository.findAll();
     }
 

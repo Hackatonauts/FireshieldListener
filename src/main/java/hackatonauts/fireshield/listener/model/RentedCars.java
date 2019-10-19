@@ -48,7 +48,7 @@ public class RentedCars {
 
     @Override
     public String toString() {
-        return "Car{" +
+        return "Position{" +
                 "brandName='" + tenantId + '\'' +
                 ", model='" + carId + '\'' +
                 '}';
