@@ -34,20 +34,6 @@ class CarRestController {
         return carRepository.save(newCar);
     }
 
-    @PutMapping("/cars/{id}")
-    Car replaceCar(@RequestBody Car newCar, @PathVariable Long id) {
-        return carRepository.findById(id)
-                .map(car -> {
-                    car.setBrandName(newCar.getBrandName());
-                    car.setModel(newCar.getModel());
-                    return carRepository.save(car);
-                })
-                .orElseGet(() -> {
-                    newCar.setId(id);
-                    return carRepository.save(newCar);
-                });
-    }
-
     @DeleteMapping("/cars/{id}")
     void deleteCar(@PathVariable Long id) {
         carRepository.deleteById(id);
@@ -68,20 +54,6 @@ class CarRestController {
     @GetMapping("/tenants")
     List<Tenant> allTenants() {
         return tenantRepository.findAll();
-    }
-
-    @PutMapping("/tenants/{id}")
-    Tenant replaceTenant(@RequestBody Tenant newTenant, @PathVariable Long id) {
-        return tenantRepository.findById(id)
-                .map(tenant -> {
-                    tenant.setFirstName(newTenant.getFirstName());
-                    tenant.setSurName(newTenant.getSurName());
-                    return tenantRepository.save(tenant);
-                })
-                .orElseGet(() -> {
-                    newTenant.setId(id);
-                    return tenantRepository.save(newTenant);
-                });
     }
 
     // rentedCars
