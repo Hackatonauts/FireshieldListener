@@ -30,4 +30,9 @@ public class FireEvent {
         this.description = description;
         this.geometries = geometries;
     }
+
+    @Override
+    public String toString() {
+        return "";
+    }
 }

@@ -3,6 +3,8 @@ package hackatonauts.fireshield.listener.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Data;
 import lombok.Getter;
@@ -27,4 +29,16 @@ public class FireModel {
         this.events = events;
     }
 
+    @Override
+    public String toString() {
+        ObjectMapper mapper = new ObjectMapper();
+        String result = null;
+        try {
+            result = mapper.writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
 }
