@@ -6,10 +6,8 @@ import hackatonauts.fireshield.listener.model.Position;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
-import org.springframework.format.datetime.DateFormatter;
 
 import java.io.IOException;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -55,7 +53,8 @@ public class ModisParser {
                     if (confidence != 100) {
                         continue;
                     }
-                    FireResponse csvEvent = new FireResponse("",
+
+                    FireResponse csvEvent = new FireResponse("Fire #" + csvRecord.getRecordNumber() + " 🔥",
                             new Position(new double[] { Double.valueOf(csvRecord.get("longitude")),
                                     Double.valueOf(csvRecord.get("latitude")) }),
                             csvToIsoDate(csvRecord.get("acq_date"), csvRecord.get("acq_time")),
