@@ -12,6 +12,7 @@ import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.time.Instant;
 
 @Data
 @Getter
@@ -45,5 +46,9 @@ public class FireEvent {
         }
 
         return result;
+    }
+
+    public Instant getDateInstant() {
+        return Instant.parse(this.geometries[0].getDate());
     }
 }
