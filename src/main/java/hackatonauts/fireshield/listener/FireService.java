@@ -20,7 +20,7 @@ public class FireService {
     private FireModel fireModel;
     private RestTemplate restTemplate = new RestTemplate();
 
-    private FireModel getFireModel() {
+    FireModel getFireModel() {
         ResponseEntity<FireModel> response = restTemplate.exchange(
                 Constants.fireEvents, HttpMethod.GET, null,
                 new ParameterizedTypeReference<FireModel>() {
