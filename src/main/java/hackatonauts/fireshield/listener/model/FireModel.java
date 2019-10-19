@@ -12,10 +12,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.util.List;
 
 @Data
-@Entity
 @Getter
 @Setter
 @NoArgsConstructor
@@ -40,5 +40,9 @@ public class FireModel {
         }
 
         return result;
+    }
+
+    public List<FireEvent> getEvents() {
+        return events;
     }
 }

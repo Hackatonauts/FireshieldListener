@@ -1,31 +1,24 @@
 package hackatonauts.fireshield.listener.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import lombok.Data;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import java.util.Objects;
-
-@Data
 @Getter
 @Setter
-@NoArgsConstructor
-@JsonDeserialize
-public class Position {
+public class FireResponse {
 
-    private double lat;
-    private double lng;
+    private String name;
+    private Position position;
+    private String date;
+    private FireEventSource source;
 
-    public Position(double[] coordinates) {
-        this.lng = coordinates[0];
-        this.lat = coordinates[1];
+    public FireResponse(String name, Position position, String date, FireEventSource source) {
+        this.name = name;
+        this.position = position;
+        this.date = date;
+        this.source = source;
     }
 
     @Override
