@@ -23,25 +23,12 @@ public class CarService {
     private List<RentedCars> rentedCars;
     private RestTemplate restTemplate = new RestTemplate();
 
-    private List<Car> getAllCars() {
+    private List<Car> getAllFireEvents() {
         ResponseEntity<List<Car>> response = restTemplate.exchange(
                 "http://localhost:8082/cars/", HttpMethod.GET, null,
-                new ParameterizedTypeReference<List<Car>>(){});
+                new ParameterizedTypeReference<List<Car>>() {
+                });
         return cars = response.getBody();     //check it
-    }
-
-    private List<RentedCars> getAllRentedCars() {
-        ResponseEntity<List<RentedCars>> response = restTemplate.exchange(
-                "http://localhost:8082/rentedcars/", HttpMethod.GET, null,
-                new ParameterizedTypeReference<List<RentedCars>>(){});
-        return rentedCars = response.getBody();     //check it
-    }
-
-    private void rentACar(Long tenantId, Long carId) {
-        RentedCars rentedCar = new RentedCars();
-        rentedCar.setTenantId(tenantId);
-        rentedCar.setCarId(carId);
-        restTemplate.postForEntity("http://localhost:8082/rentedcars/", rentedCar, RentedCars.class);
     }
 
     public void carRental(Long tenantId, Long carId) {
