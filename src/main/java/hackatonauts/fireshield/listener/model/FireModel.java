@@ -19,7 +19,6 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@JsonDeserialize
 public class FireModel {
 
     private List<FireEvent> events;
