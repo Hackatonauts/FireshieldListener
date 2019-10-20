@@ -3,6 +3,7 @@ package hackatonauts.fireshield.listener.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Data;
@@ -12,6 +13,7 @@ import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.io.IOException;
 import java.time.Instant;
 
 @Data
@@ -21,6 +23,9 @@ import java.time.Instant;
 @JsonDeserialize
 public class FireEvent {
 
+    ObjectMapper jsonMapper = new ObjectMapper();
+
+    private String id;
     private String sourceId;
     private String title;
     private String description;
@@ -50,5 +55,15 @@ public class FireEvent {
 
     public Instant getDateInstant() {
         return Instant.parse(this.geometries[0].getDate());
+    }
+
+    public void setIdFromJsonString(String jsonString) {
+        JsonNode jsonNode = null;
+        try {
+            jsonNode = jsonMapper.readTree(jsonString);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        this.id = jsonNode.get("id").asText();
     }
 }

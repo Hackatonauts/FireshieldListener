@@ -1,6 +1,9 @@
 package hackatonauts.fireshield.listener.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Data;
@@ -8,6 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.IOException;
 import java.time.Instant;
 
 @Data
@@ -17,11 +21,15 @@ import java.time.Instant;
 @JsonDeserialize
 public class FireResponse {
 
+    ObjectMapper jsonMapper = new ObjectMapper();
+
+    private String id;
     private String name;
     private Position position;
     private String date;
     private FireEventSource source;
     private int confidence;
+    private String status = "open";
 
     public FireResponse(FireEvent fireEvent) {
         this.name = fireEvent.getTitle();
@@ -54,5 +62,15 @@ public class FireResponse {
 
     public Instant getDateInstant() {
         return Instant.parse(this.date);
+    }
+
+    public void setIdFromJsonString(String jsonString) {
+        JsonNode jsonNode = null;
+        try {
+            jsonNode = jsonMapper.readTree(jsonString);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        this.id = jsonNode.get("id").asText();
     }
 }

@@ -1,79 +1,126 @@
 package hackatonauts.fireshield.listener;
 
+import hackatonauts.fireshield.listener.helpers.Constants;
+import hackatonauts.fireshield.listener.helpers.Logger;
 import hackatonauts.fireshield.listener.helpers.TimeTravelManager;
 import hackatonauts.fireshield.listener.model.FireEvent;
-import hackatonauts.fireshield.listener.model.FireEventSource;
 import hackatonauts.fireshield.listener.model.FireModel;
 import hackatonauts.fireshield.listener.model.FireResponse;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.time.Instant;
-import java.util.ArrayList;
+import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @SpringBootApplication
 public class FireEventsListenerApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(FireEventsListenerApplication.class, args);
-		TimeTravelManager timeManager = new TimeTravelManager("2019-10-10T01:00:00Z");
-		FireService service = new FireService();
-		ModisParser parser = new ModisParser();
-		FireModel model = service.getFireModel(20);
-		List<FireEvent> eventList = model.getEvents();
-		List<FireResponse> modisEventsList = parser.getEvents();
+    public static void main(String[] args) {
+        SpringApplication.run(FireEventsListenerApplication.class, args);
+        TimeTravelManager timeManager = new TimeTravelManager("2019-10-10T01:00:00Z");
+        FireService service = new FireService();
+        ModisParser parser = new ModisParser();
 
-		for (FireEvent e : eventList) {
-			if (timeManager.getCurrentDateInstant().isAfter(e.getDateInstant())) {
-				System.out.println(service.postFireResponse(new FireResponse(e)).toString());
-			}
-		}
+        Logger.logInfo("getting initial Fire Events from EONET");
+        FireModel model = service.getFireModel();
+        List<FireEvent> eventList = model.getEvents();
+        Logger.logInfo("getting initial Fire Events from MODIS");
+        List<FireResponse> modisEventsList = parser.getEvents();
 
-		for (FireResponse e : modisEventsList) {
-			if (timeManager.getCurrentDateInstant().isAfter(e.getDateInstant())) {
-				System.out.println(service.postFireResponse(e).toString());
+        for (FireEvent fireEvent : eventList) {
+            if (timeManager.getCurrentDateInstant().isAfter(fireEvent.getDateInstant())) {
+                ResponseEntity<String> response = service.postFireResponse(new FireResponse(fireEvent));
+                HttpStatus status = response.getStatusCode();
+                if (!status.equals(HttpStatus.CREATED)) {
+                    Logger.logError("Received status: " + status.toString());
+                }
 
-				try {
-					Thread.sleep(10);
-				} catch (InterruptedException exception) {
-					exception.printStackTrace();
-				}
-			}
-		}
+                fireEvent.setIdFromJsonString(response.getBody());
+            }
+        }
 
+            for (FireResponse fireResponse : modisEventsList) {
+                if (timeManager.getCurrentDateInstant().isAfter(fireResponse.getDateInstant())) {
+                    ResponseEntity<String> response = service.postFireResponse(fireResponse);
+                    HttpStatus status = response.getStatusCode();
+                    if (!status.equals(HttpStatus.CREATED)) {
+                        Logger.logError("Received status: " + status.toString());
+                    }
 
+                    fireResponse.setIdFromJsonString(response.getBody());
+                }
+            }
 
+            try {
+                Thread.sleep(Constants.sleepTime);
+            } catch (InterruptedException exception) {
+                exception.printStackTrace();
+            }
 
-		for(Instant lastInstatnt = timeManager.getCurrentDateInstant();
-			lastInstatnt.isBefore(Calendar.getInstance().toInstant());
-			timeManager.increaseDate(Calendar.HOUR, 3)) {
+            for (Instant lastInstatnt = timeManager.getCurrentDateInstant();
+                 lastInstatnt.isBefore(Calendar.getInstance().toInstant());
+                 timeManager.increaseDate(Constants.timeIncreasingUnit, Constants.timeIncreasingValue)) {
 
-//			model = service.getFireModel(1);
-			List<FireEvent> currentEventList = model.getEvents();
-			for (FireEvent e : eventList) {
-				if (timeManager.getCurrentDateInstant().isAfter(e.getDateInstant()) &&
-				lastInstatnt.isBefore(e.getDateInstant())) {
-					System.out.println(service.postFireResponse(new FireResponse(e)).toString());
-				}
-			}
+                model = service.getFireModel(1);
+                List<FireEvent> currentEventList = model.getEvents();
+                for (FireEvent fireEvent : currentEventList) {
+                    if (timeManager.getCurrentDateInstant().isAfter(fireEvent.getDateInstant()) &&
+                            lastInstatnt.isBefore(fireEvent.getDateInstant())) {
+                        ResponseEntity<String> response = service.postFireResponse(new FireResponse(fireEvent));
+                        HttpStatus status = response.getStatusCode();
+                        if (!status.equals(HttpStatus.CREATED)) {
+                            Logger.logError("Received status: " + status.toString());
+                        }
 
-			for (FireResponse e : modisEventsList) {
-				if (timeManager.getCurrentDateInstant().isAfter(e.getDateInstant()) &&
-						lastInstatnt.isBefore(e.getDateInstant())) {
-					System.out.println(service.postFireResponse(e).toString());
-				}
-			}
+                        fireEvent.setIdFromJsonString(response.getBody());
+                        eventList.add(fireEvent);
+                    }
+                }
 
-			lastInstatnt = timeManager.getCurrentDateInstant();
+                List<FireResponse> currentModisEventsList = parser.getEvents();
+                for (FireResponse fireResponse : currentModisEventsList) {
+                    if (timeManager.getCurrentDateInstant().isAfter(fireResponse.getDateInstant()) &&
+                            lastInstatnt.isBefore(fireResponse.getDateInstant())) {
+                        ResponseEntity<String> response = service.postFireResponse(fireResponse);
+                        HttpStatus status = response.getStatusCode();
+                        if (!status.equals(HttpStatus.CREATED)) {
+                            Logger.logError("Received status: " + status.toString());
+                        }
 
-			try {
-				Thread.sleep(10);
-			} catch (InterruptedException exception) {
-				exception.printStackTrace();
-			}
-		}
-	}
-	}
+                        fireResponse.setIdFromJsonString(response.getBody());
+                        modisEventsList.add(fireResponse);
+                    }
+                }
+
+                for(FireEvent fireEvent : eventList) {
+                    if(timeManager.getCurrentDateInstant().minus(5, ChronoUnit.DAYS).isAfter(fireEvent.getDateInstant())) {
+                        HttpStatus status = service.putFireResponseClosed(fireEvent);
+                        eventList.remove(fireEvent);
+                    }
+                }
+
+                for(FireResponse fireResponse : modisEventsList) {
+                    if(timeManager.getCurrentDateInstant().minus(5, ChronoUnit.DAYS).isAfter(fireResponse.getDateInstant())) {
+                        HttpStatus status = service.putFireResponseClosed(fireResponse);
+                        eventList.remove(fireResponse);
+                    }
+
+                }
+
+                lastInstatnt = timeManager.getCurrentDateInstant();
+                Logger.logInfo("Last checked date: " + lastInstatnt.toString());
+
+                try {
+                    Thread.sleep(Constants.sleepTime);
+                } catch (InterruptedException exception) {
+                    exception.printStackTrace();
+                }
+            }
+
+            Logger.logInfo("Current date reached: " + timeManager.getCurrentDateInstant().toString());
+        }
+    }
