@@ -1,11 +1,14 @@
 package hackatonauts.fireshield.listener.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import hackatonauts.fireshield.listener.helpers.Logger;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,6 +41,22 @@ public class FireEvent {
         this.title = title;
         this.description = description;
         this.geometries = geometries;
+    }
+
+    public FireEvent(String jsonString) {
+        JsonNode jsonNode = null;
+        try {
+            jsonNode = jsonMapper.readTree(jsonString);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Logger.logDebug(jsonNode.asText());
+
+        this.sourceId = jsonNode.get("id").asText();
+        this.title = jsonNode.get("title").asText();
+        this.description = jsonNode.get("description").asText();;
+        this.geometries[0] = new Geometries(jsonNode.get("geometries").asText());
     }
 
     @Override

@@ -27,9 +27,9 @@ public class FireEventsListenerApplication {
 
         Logger.logInfo("getting initial Fire Events from EONET");
         FireModel model = service.getFireModel();
-        List<FireEvent> eventList = model.getEvents();
+        List<FireEvent>   eventList = model.getEvents();
         Logger.logInfo("getting initial Fire Events from MODIS");
-        List<FireResponse> modisEventsList = parser.getEvents();
+        List<FireResponse>  modisEventsList = parser.getEvents();
 
         for (FireEvent fireEvent : eventList) {
             if (timeManager.getCurrentDateInstant().isAfter(fireEvent.getDateInstant())) {

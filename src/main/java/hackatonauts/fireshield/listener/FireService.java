@@ -26,14 +26,19 @@ public class FireService {
     private RestTemplate restTemplate = new RestTemplate();
 
     FireModel getFireModel() {
-        ResponseEntity<FireModel> response = restTemplate.exchange(
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3");
+        headers.add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36");
+        headers.add("Upgrade-Insecure-Requests", "1");
+
+        ResponseEntity<String> response = restTemplate.exchange(
                 Constants.fireEvents,
                 HttpMethod.GET,
-                null,
-                new ParameterizedTypeReference<FireModel>() {
-                });
+                new HttpEntity<>(null, headers),
+                new ParameterizedTypeReference<String>(){});
 
-        return fireModel = response.getBody();
+        return new FireModel(response.getBody());
+
     }
 
     FireModel getFireModel(int days) {
