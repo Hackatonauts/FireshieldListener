@@ -1,5 +1,6 @@
 package hackatonauts.fireshield.listener;
 
+import hackatonauts.fireshield.listener.helpers.Constants;
 import hackatonauts.fireshield.listener.model.FireEventSource;
 import hackatonauts.fireshield.listener.model.FireResponse;
 import hackatonauts.fireshield.listener.model.Position;
@@ -50,7 +51,7 @@ public class ModisParser {
 
                 for (CSVRecord csvRecord : csvParser) {
                     int confidence = Integer.valueOf(csvRecord.get("confidence"));
-                    if (confidence != 100) {
+                    if (confidence != Constants.confidence) {
                         continue;
                     }
 

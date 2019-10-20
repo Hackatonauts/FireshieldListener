@@ -17,6 +17,5 @@ public class Constants {
     public static int sleepTime =2000;
     public static int timeIncreasingValue =12;
     public static int timeIncreasingUnit = Calendar.HOUR;
-
-
+    public static int confidence = 100;
 }

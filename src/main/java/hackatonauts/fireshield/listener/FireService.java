@@ -63,8 +63,7 @@ public class FireService {
                 Constants.baseUrl + Constants.endpointName,
                 HttpMethod.POST,
                 httpEntity,
-                new ParameterizedTypeReference<String>() {
-                });
+                String.class);
 
 //        Logger.logDebug(response.getBody());
         return response;
